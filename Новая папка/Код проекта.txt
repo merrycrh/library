@@ -1,0 +1,284 @@
+
+import tkinter as tk
+
+class SampleApp(tk.Tk):
+    def __init__(self, *arg, **kwargs):
+        tk.Tk.__init__(self, *arg, **kwargs)
+        container = tk.Frame(self)
+        container.pack(side='top', fill='both', expand=True)
+        container.grid_rowconfigure(0, weight=1)
+        container.grid_columnconfigure(0, weight=1)
+
+        self.frames = {}
+        for F in (StartPage, MenuPage, Registration, Romance, Detective, Motivate, Science, Thriller, Fantasy):
+            page_name = F.__name__
+            frame = F(parent=container, controller=self)
+            self.frames[page_name] = frame
+
+            frame.grid(row=0, column=0, sticky='nsew')
+
+            self.show_frame('StartPage')
+
+    def show_frame(self, page_name):
+        frame = self.frames[page_name]
+        frame.tkraise()
+
+
+class StartPage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent, bg="#FFBBFF")
+        self.controller = controller
+        self.controller.title('Library')
+        self.controller.state('zoomed')
+
+        big_lable = tk.Label(self, text='Welcome to our \n Library', font=('Monotype Corsiva', 50, 'bold'),fg='purple', bg='#FFBBFF')
+        big_lable.pack(pady=30)
+
+        login_lable = tk.Label(self, text='Введите ваш логин', font=('Monotype Corsiva', 15, 'bold'),fg='purple', bg='#FFBBFF')
+        login_lable.pack(pady=30)
+
+        my_login = tk.StringVar()
+        login_entry = tk.Entry(self, textvariable=my_login, font=('Candara', 15, 'bold'),fg='black', bg='white')
+        login_entry.pack(pady=30)
+
+        password_lable = tk.Label(self, text='Введите ваш пароль', font=('Monotype Corsiva', 15, 'bold'),fg='purple', bg='#FFBBFF')
+        password_lable.pack(pady=30)
+
+        my_password = tk.StringVar()
+        password_entry = tk.Entry(self, textvariable=my_password, font=('Candara', 15, 'bold'),fg='black', bg='white')
+        password_entry.pack(pady=30)
+
+        def check_password():
+            if my_password.get() == '1' and my_login.get() == 'a':
+                controller.show_frame('MenuPage')
+
+                # right_lable = tk.Label(self, text = "right answer")
+                # right_lable.pack()
+            else:
+                right_lable['text'] = 'Wrong password'
+
+        password_button = tk.Button(self, text='Проверить', command=check_password,font=('Monotype Corsiva', 15, 'bold'),fg='purple', bg='#FFBBFF')
+        password_button.pack()
+        right_lable = tk.Label(self, font=('Candara', 15, 'bold'),fg='purple', bg='#FFBBFF')
+        right_lable.pack(pady=30)
+
+        def registr():
+            controller.show_frame('Registration')
+
+        registr_button = tk.Button(self, text='Регистрация', command=registr,
+                                   font=('Monotype Corsiva', 15, 'bold'),fg='purple', bg='#FFBBFF')
+        registr_button.pack(pady=30)
+
+
+class Registration(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent, bg='#FFBBFF')
+        self.controller = controller
+
+        heading_lable = tk.Label(self, text="Новый пользователь", font=('Monotype Corsiva', 50, 'bold'),fg='purple', bg='#FFBBFF')
+        heading_lable.pack(pady=25)
+
+        name_1_lable = tk.Label(self, text="Фамилия", font=('Monotype Corsiva', 15, 'bold'),fg='purple', bg='#FFBBFF')
+        name_1_lable.pack(pady=25)
+
+        name_1_entry = tk.Entry(self, font=('Candara', 15, 'bold'), fg="black")
+        name_1_entry.pack(pady=0)
+
+        name_2_lable = tk.Label(self, text="Имя", font=('Monotype Corsiva', 15, 'bold'),fg='purple', bg='#FFBBFF')
+        name_2_lable.pack(pady=25)
+
+        name_2_entry = tk.Entry(self, font=('Candara', 15, 'bold'), fg="black")
+        name_2_entry.pack(pady=0)
+
+        name_3_lable = tk.Label(self, text="Логин", font=('Monotype Corsiva', 15, 'bold'),fg='purple', bg='#FFBBFF')
+        name_3_lable.pack(pady=25)
+
+        name_3_entry = tk.Entry(self, font=('Candara', 15, 'bold'), fg="black")
+        name_3_entry.pack(pady=0)
+
+        name_4_lable = tk.Label(self, text="Пароль", font=('Monotype Corsiva', 15, 'bold'),fg='purple', bg='#FFBBFF')
+        name_4_lable.pack(pady=25)
+
+        name_4_entry = tk.Entry(self, font=('Candara', 15, 'bold'), fg="black")
+        name_4_entry.pack(pady=0)
+
+        save_button = tk.Button(self, text="Создать", bg="#FFBBFF", width=25,
+                                font=('Monotype Corsiva', 15, 'bold'), fg="purple")
+        save_button.pack()
+        save_button.place(x=800, y=650)
+
+        def back():
+            controller.show_frame('StartPage')
+
+        back_button = tk.Button(self, text='Back', command=back, font=('Candara', 15, 'bold'),fg='black', bg='white')
+        back_button.pack(pady=30)
+        back_button.place(x=920, y=700)
+
+class MenuPage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self,parent,bg='#FFBBFF')
+        self.controller=controller
+        big_lable = tk.Label(self, text='Жанры книг', font=('Monotype Corsiva', 50, 'bold'), fg='purple', bg='#FFBBFF')
+        big_lable.pack(pady=30)
+        big_lable.place(x=500, y=40)
+
+        def get_romance():
+            controller.show_frame('Romance')
+
+        contact_button = tk.Button(self, text="Романы", command=(get_romance), font=('Candara', 40, 'bold'), fg='purple', bg='#FFBBFF')
+        contact_button.pack(pady=50)
+        contact_button.place(x=300, y=200)
+
+        def get_detective():
+            controller.show_frame('Detective')
+
+        contact_button = tk.Button(self, text="Детективы", command=(get_detective), font=('Candara', 40, 'bold'), fg='purple', bg='#FFBBFF')
+        contact_button.pack(pady=50)
+        contact_button.place(x=300, y=350)
+
+        def get_motivate():
+            controller.show_frame('Motivate')
+
+        contact_button = tk.Button(self, text="Мотивационные", command=(get_motivate), font=('Candara', 40, 'bold'), fg='purple', bg='#FFBBFF')
+        contact_button.pack(pady=50)
+        contact_button.place(x=300, y=500)
+
+        def get_science():
+            controller.show_frame('Science')
+
+        contact_button = tk.Button(self, text="Научные", command=(get_science), font=('Candara', 40, 'bold'), fg='purple', bg='#FFBBFF')
+        contact_button.pack(pady=50)
+        contact_button.place(x=1000, y=200)
+
+        def get_thriller():
+            controller.show_frame('Thriller')
+
+        contact_button = tk.Button(self, text="Боевики", command=(get_thriller), font=('Candara', 40, 'bold'), fg='purple', bg='#FFBBFF')
+        contact_button.pack(pady=50)
+        contact_button.place(x=1000, y=350)
+
+        def get_fantasy():
+            controller.show_frame('Fantasy')
+
+        contact_button = tk.Button(self, text="Фантастика", command=(get_fantasy), font=('Candara', 40, 'bold'), fg='purple', bg='#FFBBFF')
+        contact_button.pack(pady=50)
+        contact_button.place(x=1000, y=500)
+
+class Romance(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent, bg="#FFBBFF")
+        self.controller = controller
+        self.controller.title('Library')
+        self.controller.state('zoomed')
+
+        big_lable = tk.Label(self, text=' Первый ряд, третья полка', font=('Candara', 50, 'bold'), fg='purple', bg='#FFBBFF')
+        big_lable.pack(pady=30)
+        text = tk.Label(self, text='', font=('Candara', 12, 'bold'), fg='black', bg='#FFBBFF')
+        text.pack(pady=30)
+
+        def return_MenuPage():
+            controller.show_frame('MenuPage')
+
+        return_button = tk.Button(self, text='Назад', command=return_MenuPage,font=('Candara', 10, 'bold'), fg='purple', bg='#FFBBFF')
+        return_button.pack(pady=300)
+        return_button.place(x=10, y=10)
+
+class Detective(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent, bg="#FFBBFF")
+        self.controller = controller
+        self.controller.title('Library')
+        self.controller.state('zoomed')
+
+        big_lable = tk.Label(self, text='Четвёртый ряд, вторая полка', font=('Candara', 50, 'bold'), fg='purple', bg='#FFBBFF')
+        big_lable.pack(pady=30)
+        text = tk.Label(self, text='', font=('Candara', 12, 'bold'), fg='black', bg='#FFBBFF')
+        text.pack(pady=30)
+
+        def return_MenuPage():
+            controller.show_frame('MenuPage')
+
+        return_button = tk.Button(self, text='Назад', command=return_MenuPage,font=('Candara', 10, 'bold'), fg='purple', bg='#FFBBFF')
+        return_button.pack(pady=300)
+        return_button.place(x=10, y=10)
+
+class Motivate(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent, bg="#FFBBFF")
+        self.controller = controller
+        self.controller.title('Library')
+        self.controller.state('zoomed')
+
+        big_lable = tk.Label(self, text='Второй ряд, пятая полка', font=('Candara', 50, 'bold'), fg='purple', bg='#FFBBFF')
+        big_lable.pack(pady=30)
+        text = tk.Label(self, text='', font=('Candara', 12, 'bold'), fg='black', bg='#FFBBFF')
+        text.pack(pady=30)
+
+        def return_MenuPage():
+            controller.show_frame('MenuPage')
+
+        return_button = tk.Button(self, text='Назад', command=return_MenuPage,font=('Candara', 10, 'bold'), fg='purple', bg='#FFBBFF')
+        return_button.pack(pady=300)
+        return_button.place(x=10, y=10)
+
+class Science(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent, bg="#FFBBFF")
+        self.controller = controller
+        self.controller.title('Library')
+        self.controller.state('zoomed')
+
+        big_lable = tk.Label(self, text='Первый ряд, первая полка', font=('Candara', 50, 'bold'), fg='purple', bg='#FFBBFF')
+        big_lable.pack(pady=30)
+        text = tk.Label(self, text='', font=('Candara', 12, 'bold'), fg='black', bg='#FFBBFF')
+        text.pack(pady=30)
+
+        def return_MenuPage():
+            controller.show_frame('MenuPage')
+
+        return_button = tk.Button(self, text='Назад', command=return_MenuPage,font=('Candara', 10, 'bold'), fg='purple', bg='#FFBBFF')
+        return_button.pack(pady=300)
+        return_button.place(x=10, y=10)
+
+class Thriller(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent, bg="#FFBBFF")
+        self.controller = controller
+        self.controller.title('Library')
+        self.controller.state('zoomed')
+
+        big_lable = tk.Label(self, text='Третий ряд, вторая полка', font=('Candara', 50, 'bold'), fg='purple', bg='#FFBBFF')
+        big_lable.pack(pady=30)
+        text = tk.Label(self, text='', font=('Candara', 12, 'bold'), fg='black', bg='#FFBBFF')
+        text.pack(pady=30)
+
+        def return_MenuPage():
+            controller.show_frame('MenuPage')
+
+        return_button = tk.Button(self, text='Назад', command=return_MenuPage,font=('Candara', 10, 'bold'), fg='purple', bg='#FFBBFF')
+        return_button.pack(pady=300)
+        return_button.place(x=10, y=10)
+
+class Fantasy(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent, bg="#FFBBFF")
+        self.controller = controller
+        self.controller.title('Library')
+        self.controller.state('zoomed')
+
+        big_lable = tk.Label(self, text='Второй ряд, третья полка', font=('Candara', 50, 'bold'), fg='purple', bg='#FFBBFF')
+        big_lable.pack(pady=30)
+        text = tk.Label(self, text='', font=('Candara', 12, 'bold'), fg='black', bg='#FFBBFF')
+        text.pack(pady=30)
+
+        def return_MenuPage():
+            controller.show_frame('MenuPage')
+
+        return_button = tk.Button(self, text='Назад', command=return_MenuPage,font=('Candara', 10, 'bold'), fg='purple', bg='#FFBBFF')
+        return_button.pack(pady=300)
+        return_button.place(x=10, y=10)
+
+if __name__=='__main__':
+    app = SampleApp()
+    app.mainloop()
+
